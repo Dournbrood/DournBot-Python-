@@ -42,8 +42,8 @@ def connectAndWait():
 		ircmsg = ircsock.recv(2048).decode("UTF-8")
 		ircmsg = ircmsg.strip('\n\r')
 		print(ircmsg)
-		if ircmsg.find(connectMsg) == 1:
-			print("No action taken.")
+		if ircmsg.find(connectMsg) != -1:
+			break
 	print("Connected!")
 
 def authWithNickServ(botAuthName, botAuthPass, authConfirmMSG): #Attempts to auth with nickserv. Program is stopped until this happens.
