@@ -6,33 +6,15 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-print("Importing socket...")
 try:
 	import socket
-	print("Socket import successful!")
-except Exception as e:
-	print("SOCKET IMPORT FAILED!")
-	
-print ("Importing time...")
-try:
 	import time
-	print("time Imported successfully!")
-except Exception as e:
-	print("TIME IMPORT FAILED! CONCEPT TOO ABSTRACT AND HUMAN!")
-
-print("Importing command manager...")
-try:
 	import cmdHandler
-	print("Command manager imported successfully!")
-except Exception as e:
-	print("This one is your fault, Dourn. cmdHandler didn't import. FIX IT.")
-	
-print("Importing login...")
-try:
 	import login
-	print("Login imported successfully!")
+	import imp
 except Exception as e:
-	print("LOGIN FILE FAILED TO IMPORT! BOT CANNOT FUNCTION ON SOME CHANNELS!")
+	print("Oopsie woopsie!")
+	logger.exception(e)
 
 #Setting variables. Probably will move this to a config file later.
 botAuthName = login.username
@@ -105,6 +87,11 @@ def main():
 							
 					if msgName.lower() == adminname.lower():
 						fromAdmin = 1
+						
+					if fromAdmin == 1 and msgContent[:8] == ("d?reload"):
+						cmdHandler.reloadPlugins()
+						imp.reload(cmdHandler)
+						sendmsg("Plugins and manager reloaded successfully!")
 						
 					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file, and each command to its own file, subsequently. Things are bound to get messy.
 				
