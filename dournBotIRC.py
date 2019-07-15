@@ -26,8 +26,8 @@ except Exception as e:
 	print("This one is your fault, Dourn. cmdHandler didn't import. FIX IT.")
 
 #Setting variables. Probably will move this to a config file later.
-botAuthName = "Dournbrood"
-botAuthPass = "tannerhawkins14"
+botAuthName = -1
+botAuthPass = -1
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cmdChar = "d?"
 server = "chat.freenode.net" # Server
