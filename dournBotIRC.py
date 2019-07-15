@@ -82,18 +82,18 @@ def main():
 				
 				if msgName != botnick:
 				
-					print("User " + msgHostname + " with nick " + msgName + " sent message from " + msgIP + " in channel " + msgChannel + ":\n\"" + msgContent + "\"")
+					print("\n--NEW MESSAGE-- \n\nH: " + msgHostname + "\nNick: " + msgName + "\nIP: " + msgIP + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
 					
 							
 					if msgName.lower() == adminname.lower():
 						fromAdmin = 1
 						
 					if fromAdmin == 1 and msgContent[:8] == ("d?reload"):
-						cmdHandler.reloadPlugins()
+						#cmdHandler.reloadPlugins()
 						imp.reload(cmdHandler)
 						sendmsg("Plugins and manager reloaded successfully!")
 						
-					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file, and each command to its own file, subsequently. Things are bound to get messy.
+					#cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file.
 				
 				fromAdmin = 0 #Just to be safe.
 				
