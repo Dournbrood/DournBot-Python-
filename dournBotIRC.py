@@ -27,7 +27,7 @@ except Exception as e:
 
 #Setting variables. Probably will move this to a config file later.
 botAuthName = -1
-botAuthPass = -1
+botAuthPass = -50
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cmdChar = "d?"
 server = "chat.freenode.net" # Server
