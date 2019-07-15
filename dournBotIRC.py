@@ -12,6 +12,7 @@ try:
 	import cmdHandler
 	import login
 	import imp
+
 except Exception as e:
 	print("Oopsie woopsie!")
 	logger.exception(e)
@@ -23,13 +24,27 @@ ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cmdChar = "d?"
 server = "chat.freenode.net" # Server
 channel = "#powder-bots" # Channel
-botnick = "DournBot" # Your bots nick.
+botNick = "DournBot" # Your bots nick.
 adminname = "Dournbrood" #Your IRC nickname.
-exitcode = "Bye " + botnick #Text that we will use
-authConfirmMSG = "NOTICE " + botnick + " :You are now identified for " #This basically tests for the authorization confirmation message from NickServ.
-ircsock.connect((server, 6667)) # Here we connect to the server using the port 6667
-ircsock.send(bytes("USER "+ botnick +" "+ botnick +" "+ botnick + " " + botnick + "\n", "UTF-8")) # user information
-ircsock.send(bytes("NICK "+ botnick +"\n", "UTF-8")) # assign the nick to the bot
+exitcode = "Bye " + botNick #Text that we will use
+authConfirmMSG = "NOTICE " + botNick + " :You are now identified for " #This basically tests for the authorization confirmation message from NickServ.
+
+
+def connectAndWait():
+	
+	ircsock.connect((server, 6667)) # Here we connect to the server using the port 6667
+	ircsock.send(bytes("USER "+ botNick +" "+ botNick +" "+ botNick + " " + botNick + "\n", "UTF-8")) # user information
+	ircsock.send(bytes("NICK "+ botNick +"\n", "UTF-8")) # assign the nick to the bot
+	ircmsg = ""
+	connectMsg = " PRIVMSG " + botNick + " :VERSION"
+	
+	while 1:
+		ircmsg = ircsock.recv(2048).decode("UTF-8")
+		ircmsg = ircmsg.strip('\n\r')
+		print(ircmsg)
+		if ircmsg.find(connectMsg) == 1:
+			print("No action taken.")
+	print("Connected!")
 
 def authWithNickServ(botAuthName, botAuthPass, authConfirmMSG): #Attempts to auth with nickserv. Program is stopped until this happens.
 	ircsock.send(bytes("NICKSERV IDENTIFY " + botAuthName + " " + botAuthPass + "\n", "UTF-8")) #Sends message to NickServ with username and pass.
@@ -61,7 +76,8 @@ def sendmsg(msg, target = channel): # sends messages to the target.
 	pass
 
 def main():
-		
+	
+	connectAndWait()
 	authWithNickServ(botAuthName, botAuthPass, authConfirmMSG)
 	joinchan(channel)
 	
@@ -80,7 +96,7 @@ def main():
 				msgChannel = ircmsg.split('PRIVMSG ', 1)[1].split(' :', 1)[0]
 				msgContent = ircmsg.split(' PRIVMSG ', 1)[1].split(':', 1)[1]
 				
-				if msgName != botnick:
+				if msgName != botNick:
 				
 					print("\n--NEW MESSAGE-- \n\nH: " + msgHostname + "\nNick: " + msgName + "\nIP: " + msgIP + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
 					
@@ -93,7 +109,7 @@ def main():
 						imp.reload(cmdHandler)
 						sendmsg("Plugins and manager reloaded successfully!")
 						
-					#cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file.
+					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file.
 				
 				fromAdmin = 0 #Just to be safe.
 				
