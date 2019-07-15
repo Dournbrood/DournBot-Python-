@@ -1,4 +1,6 @@
 
+#Atom text editor - GitHub??
+
 print("Firing up the ol' exception logger...")
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -9,7 +11,7 @@ try:
 	import socket
 	print("Socket import successful!")
 except Exception as e:
-	print("SOCKET IMPORT FAILED! WHAT THE FUCK?")
+	print("SOCKET IMPORT FAILED!")
 	
 print ("Importing time...")
 try:
@@ -24,10 +26,17 @@ try:
 	print("Command manager imported successfully!")
 except Exception as e:
 	print("This one is your fault, Dourn. cmdHandler didn't import. FIX IT.")
+	
+print("Importing login...")
+try:
+	import login
+	print("Login imported successfully!")
+except Exception as e:
+	print("LOGIN FILE FAILED TO IMPORT! BOT CANNOT FUNCTION ON SOME CHANNELS!")
 
 #Setting variables. Probably will move this to a config file later.
-botAuthName = -1
-botAuthPass = -50
+botAuthName = login.username
+botAuthPass = login.password
 ircsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cmdChar = "d?"
 server = "chat.freenode.net" # Server
