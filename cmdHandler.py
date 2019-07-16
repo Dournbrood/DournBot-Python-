@@ -1,9 +1,8 @@
 
 
 
-
-
 def handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg, channel):
-	sendmsg("Message received!", channel)
-	print(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin)
+		isCommand = 0;
+	if msgContent.find('d?')[:2] != -1
+		isCommand = 1;
 	pass

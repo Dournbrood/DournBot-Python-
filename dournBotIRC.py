@@ -25,10 +25,10 @@ cmdChar = "d?"
 server = "chat.freenode.net" # Server
 channel = "#powder-bots" # Channel
 botNick = "DournBot" # Your bots nick.
-adminname = "~Dournbro" #Your IRC nickname.
+adminname = login.hostname #Your IRC nickname.
 exitcode = "Bye " + botNick #Text that we will use
 authConfirmMSG = "NOTICE " + botNick + " :You are now identified for " #This basically tests for the authorization confirmation message from NickServ.
-
+fromAdmin = 0 #Just to be safe.
 
 def connectAndWait():
 	
@@ -82,6 +82,7 @@ def main():
 	joinchan(channel)
 	
 	
+	
 	while 1:
 		ircmsg = ircsock.recv(2048).decode("UTF-8")
 		ircmsg = ircmsg.strip('\n\r')
@@ -91,18 +92,19 @@ def main():
 		try:
 			if ircmsg.find("PRIVMSG") != -1: #if PRIVMSG is present in the message string, then go ahead and pick it apart. if not? just uh, send a ping
 				msgName = ircmsg.split('!', 1)[0][1:]
-				msgHostname = ircmsg.split('!', 1)[1].split('@', 1)[0]
-				msgIP = ircmsg.split('@', 1)[1].split(' PRIVMSG', 1)[0]
+				msgUser = ircmsg.split('!', 1)[1].split('@', 1)[0]
+				msgHostname = ircmsg.split('@', 1)[1].split(' PRIVMSG', 1)[0]
 				msgChannel = ircmsg.split('PRIVMSG ', 1)[1].split(' :', 1)[0]
 				msgContent = ircmsg.split(' PRIVMSG ', 1)[1].split(':', 1)[1]
 				
 				if msgName != botNick: #making sure messages aren't from the bot itself.
 				
-					print("\n--NEW MESSAGE-- \n\nHostname: " + msgHostname + "\nNick: " + msgName + "\nIP: " + msgIP + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
+					print("\n--NEW MESSAGE-- \n\nHostname: " + msgHostname + "\nNick: " + msgName + "\nUser: " + msgUser + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
 					
-							
 					if msgHostname.lower() == adminname.lower():
 						fromAdmin = 1
+					else:
+						fromAdmin = 0
 						
 					if fromAdmin == 1 and msgContent[:8] == ("d?reload"):
 						#cmdHandler.reloadPlugins()
@@ -110,8 +112,6 @@ def main():
 						sendmsg("Plugins and manager reloaded successfully!")
 						
 					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg, channel) #Decided to move commands to their own file.
-				
-				fromAdmin = 0 #Just to be safe.
 				
 			else:
 			
