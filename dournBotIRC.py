@@ -36,7 +36,7 @@ def connectAndWait():
 	ircsock.send(bytes("USER "+ botNick +" "+ botNick +" "+ botNick + " " + botNick + "\n", "UTF-8")) # user information
 	ircsock.send(bytes("NICK "+ botNick +"\n", "UTF-8")) # assign the nick to the bot
 	ircmsg = ""
-	connectMsg = " PRIVMSG " + botNick + " :VERSION"
+	connectMsg = " PRIVMSG " + botNick + " :VERSION"
 	
 	while 1:
 		ircmsg = ircsock.recv(2048).decode("UTF-8")
@@ -109,7 +109,7 @@ def main():
 						imp.reload(cmdHandler)
 						sendmsg("Plugins and manager reloaded successfully!")
 						
-					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin) #Decided to move commands to their own file.
+					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg(), channel) #Decided to move commands to their own file.
 				
 				fromAdmin = 0 #Just to be safe.
 				
