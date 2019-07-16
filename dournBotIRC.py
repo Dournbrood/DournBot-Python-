@@ -25,7 +25,7 @@ cmdChar = "d?"
 server = "chat.freenode.net" # Server
 channel = "#powder-bots" # Channel
 botNick = "DournBot" # Your bots nick.
-adminname = "Dournbrood" #Your IRC nickname.
+adminname = "~Dournbro" #Your IRC nickname.
 exitcode = "Bye " + botNick #Text that we will use
 authConfirmMSG = "NOTICE " + botNick + " :You are now identified for " #This basically tests for the authorization confirmation message from NickServ.
 
@@ -96,12 +96,12 @@ def main():
 				msgChannel = ircmsg.split('PRIVMSG ', 1)[1].split(' :', 1)[0]
 				msgContent = ircmsg.split(' PRIVMSG ', 1)[1].split(':', 1)[1]
 				
-				if msgName != botNick:
+				if msgName != botNick: #making sure messages aren't from the bot itself.
 				
-					print("\n--NEW MESSAGE-- \n\nH: " + msgHostname + "\nNick: " + msgName + "\nIP: " + msgIP + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
+					print("\n--NEW MESSAGE-- \n\nHostname: " + msgHostname + "\nNick: " + msgName + "\nIP: " + msgIP + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
 					
 							
-					if msgName.lower() == adminname.lower():
+					if msgHostname.lower() == adminname.lower():
 						fromAdmin = 1
 						
 					if fromAdmin == 1 and msgContent[:8] == ("d?reload"):
@@ -109,7 +109,7 @@ def main():
 						imp.reload(cmdHandler)
 						sendmsg("Plugins and manager reloaded successfully!")
 						
-					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg(), channel) #Decided to move commands to their own file.
+					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg, channel) #Decided to move commands to their own file.
 				
 				fromAdmin = 0 #Just to be safe.
 				
