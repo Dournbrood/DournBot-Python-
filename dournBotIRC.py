@@ -92,14 +92,14 @@ def main():
 		try:
 			if ircmsg.find("PRIVMSG") != -1: #if PRIVMSG is present in the message string, then go ahead and pick it apart. if not? just uh, send a ping
 				msgName = ircmsg.split('!', 1)[0][1:]
-				msgUser = ircmsg.split('!', 1)[1].split('@', 1)[0]
+				msgIdent = ircmsg.split('!', 1)[1].split('@', 1)[0]
 				msgHostname = ircmsg.split('@', 1)[1].split(' PRIVMSG', 1)[0]
 				msgChannel = ircmsg.split('PRIVMSG ', 1)[1].split(' :', 1)[0]
 				msgContent = ircmsg.split(' PRIVMSG ', 1)[1].split(':', 1)[1]
 				
 				if msgName != botNick: #making sure messages aren't from the bot itself.
 				
-					print("\n--NEW MESSAGE-- \n\nHostname: " + msgHostname + "\nNick: " + msgName + "\nUser: " + msgUser + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
+					print("\n--NEW MESSAGE-- \n\nHostname: " + msgHostname + "\nNick: " + msgName + "\nUser: " + msgIdent + "\nChannel: " + msgChannel + "\nMessage: \"" + msgContent + "\"")
 					
 					if msgHostname.lower() == adminname.lower():
 						fromAdmin = 1
@@ -111,7 +111,7 @@ def main():
 						imp.reload(cmdHandler)
 						sendmsg("Plugins and manager reloaded successfully!")
 						
-					cmdHandler.handle(msgName, msgHostname, msgIP, msgChannel, msgContent, fromAdmin, sendmsg, channel) #Decided to move commands to their own file.
+					cmdHandler.handle(msgName, msgHostname, msgIdent, msgChannel, msgContent, fromAdmin, sendmsg, channel) #Decided to move commands to their own file.
 				
 			else:
 			
@@ -120,6 +120,8 @@ def main():
 
 		except Exception as e:
 			print("CRITICAL ERROR. MESSAGE FAILED TO BE DISSECTED.")
-			sendmsg("ERROR! Tell Dournbrood to check the bot's log!")
+			sendmsg(str(e).replace('\n', '|'))
 			logger.exception(e)
+
+#Actually running the bot now!
 main()
