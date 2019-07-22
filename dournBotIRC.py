@@ -86,7 +86,10 @@ def main():
 	while 1:
 		ircmsg = ircsock.recv(2048).decode("UTF-8")
 		ircmsg = ircmsg.strip('\n\r')
-		print(ircmsg)
+		try:
+			print(ircmsg)
+		except Exception as e:
+			sendmsg("Fuck you.")
 
 		# Messages come in from IRC in the format of: ":[Nick]!~[hostname]@[IP Address] PRIVMSG [channel] :[message]"
 		try:
